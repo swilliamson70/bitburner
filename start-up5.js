@@ -1,3 +1,4 @@
+/** @param {NS} ns */
 export async function main(ns) {
   //crawl the net, hack the net
     
@@ -68,23 +69,23 @@ export async function main(ns) {
   function hackServer (hackTarget){
     ns.tprint("> hacking > " + hackTarget);
     let target_server = ns.getServer(hackTarget);
-    if (ports > 4){
+    if (target_server.numOpenPortsRequired > 4){
       ns.sqlinject(target_server.hostname);
       ns.tprint("sqlInject");
     };
-    if (ports > 3){
+    if (target_server.numOpenPortsRequired > 3){
       ns.httpworm(target_server.hostname);
       ns.tprint("httpWorm");
     };
-    if (ports > 2) {
+    if (target_server.numOpenPortsRequired > 2) {
       ns.relaysmtp(target_server.hostname);
       ns.tprint("relaySmtp");
     };
-    if (ports > 1) {
+    if (target_server.numOpenPortsRequired > 1) {
       ns.ftpcrack(target_server.hostname);
       ns.tprint("ftpCrack");
     };
-    if (ports > 0) {
+    if (target_server.numOpenPortsRequired > 0) {
       ns.brutessh(target_server.hostname);
       ns.tprint("bruteSsh");
     };
@@ -97,62 +98,6 @@ export async function main(ns) {
     };
 
   }; // function hackServer    
-    
-    function hackNeighbors (hackTarget){
-      let neighbors = ns.scan(hackTarget);
-
-      for (let i = 0; i < neighbors.length; i++) {
-      //get target info
-        let target_server = ns.getServer(neighbors[i]);
-        ns.tprint("hostname: " + target_server.hostname 
-                + "- Ports: " + target_server.numOpenPortsRequired 
-                + " HackDifficulty: " + target_server.hackDifficulty
-                + " Current Hack Lvl: " + ns.getHackingLevel()
-                + ' Admin: ' + target_server.hasAdminRights);
-
-        let ports = target_server.numOpenPortsRequired;
-
-        //doesn't have admin 
-        //and hackdifficulty <= current hack stat 
-        //and have tools to open ports
-        if (!target_server.hasAdminRights 
-            && target_server.hackDifficulty <= ns.getHackingLevel()
-            && ports <= toolCount) {
-          ns.tprint("> hacking >");
-          if (ports > 4){
-            ns.sqlinject(target_server.hostname);
-            ns.tprint("sqlInject");
-          };
-          if (ports > 3){
-            ns.httpworm(target_server.hostname);
-            ns.tprint("httpWorm");
-          };
-          if (ports > 2) {
-            ns.relaysmtp(target_server.hostname);
-            ns.tprint("relaySmtp");
-          };
-          if (ports > 1) {
-            ns.ftpcrack(target_server.hostname);
-            ns.tprint("ftpCrack");
-          };
-          if (ports > 0) {
-            ns.brutessh(target_server.hostname);
-            ns.tprint("bruteSsh");
-          };
-          ns.nuke(target_server.hostname);
-          
-          ns.scp("early-hack-template.js", target_server.hostname);
-          let script_number = (target_server.maxRam - target_server.ramUsed) / script_req;
-          if (Math.floor(script_number) > 0) { 
-            ns.exec("early-hack-template.js", target_server.hostname, Math.floor(script_number));
-          };
-
-        }; //if (!target_server.hasAdminRights)      
-
-      }; //for (let i = 0; i < neighbors.length; i++)
-
-    }; //function hackNeighbors
-
 
   let script_req = 2.6;
   let script_number = 1;
@@ -168,20 +113,20 @@ export async function main(ns) {
   for (let i = 1; i < hackTree.length; i++) {
     //ns.tprint(hackTree[i].hostname);
     let target = ns.getServer(hackTree[i].hostname);
-    // ns.tprint("current target " + target.hostname + " admin/diff/ports " 
-    //    + target.hasAdminRights + "/" + target.hackDifficulty
-    //    + "/" + target.ports);
+    ns.tprint("current target " + target.hostname + " admin/diff/ports " 
+       + target.hasAdminRights + "/" + target.hackDifficulty
+       + "/" + target.numOpenPortsRequired);
 
     if (target.hasAdminRights == true) {
-      //ns.tprint("already hacked");
+      ns.tprint("already hacked");
       accAlready++;
     } else if ( target.hackDifficulty <= ns.getHackingLevel()
-              && target.ports <= toolCount) {
-        //ns.tprint("hacking");
+              && target.numOpenPortsRequired <= toolCount) {
+        ns.tprint("hacking");
         hackServer(target.hostname);
         accHacked++;
     } else {
-      //ns.tprint("can't")
+      ns.tprint("can't")
       accCant++;
     };
           
