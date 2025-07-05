@@ -105,7 +105,7 @@ export async function main(ns) {
   let accHacked = 0;
   let accCant = 0;
 
-  bTree("home");
+  bTree("home",0);
 
   //hackNeighbors('home');
   //for each hostname in hackTree, evaluate, increment counter, hack
