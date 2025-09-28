@@ -11,3 +11,4 @@ I've started playing with Bitburner after I found it on Steam. Since I've never 
 
 2025-08-23: after "playing" for 10 or 15 minutes every now and again - because the game progresses so slowly - I'm beginning to wonder if this is really worth the effort. Added runHack.js to get the "Need more real life ram" achievement where you have to run 1000 scripts simultaneously - also to increase the Hack rate to get out of the current node.
 
+2025-09-28: the frequency of checking back on the running game is dropping but, ..., a lot. Just finished 5.1 and moved to BN6. Had a couple of random ideas for scripts but I'm not feeling it. Started current with free CS at the university, but I don't know if I'm coming back anytime soon.
